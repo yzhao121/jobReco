@@ -1,5 +1,7 @@
 package com.ita.job.servlet;
 
+import com.ita.job.external.GitHubClient;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,12 @@ public class SearchServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().print("this is the search servlet");
+        double lat = Double.parseDouble(request.getParameter("lat"));
+        double lon = Double.parseDouble(request.getParameter("lon"));
+
+        GitHubClient client = new GitHubClient();
+        String itemString = client.search(lat, lon, null);
+        response.setContentType("application/json");
+        response.getWriter().print(itemString);
     }
 }
