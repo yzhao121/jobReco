@@ -21,17 +21,16 @@ public class GitHubClient {
         if (keyword == null) {
             keyword = DEFAULT_KEYWORD;
         }
-
         // “hello world” => “hello%20world”
         try {
             keyword = URLEncoder.encode(keyword, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
         String url = String.format(URL_TEMPLATE, keyword, lat, lon);
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
-
         // Create a custom response handler
         ResponseHandler<List<Item>> responseHandler = response -> {
             if (response.getStatusLine().getStatusCode() != 200) {
@@ -41,10 +40,10 @@ public class GitHubClient {
             if (entity == null) {
                 return Collections.emptyList();
             }
+
             ObjectMapper mapper = new ObjectMapper();
-            //return Arrays.asList(mapper.readValue(entity.getContent(), Item[].class));
             List<Item> items = Arrays.asList(mapper.readValue(entity.getContent(), Item[].class));
-            extractKeywords(items);
+            //extractKeyWords(items);
             return items;
         };
 
@@ -56,7 +55,7 @@ public class GitHubClient {
         return Collections.emptyList();
     }
 
-    private void extractKeywords(List<Item> items) {
+    private void extractKeyWords(List<Item> items) {
         MonkeyLearnClient monkeyLearnClient = new MonkeyLearnClient();
         List<String> descriptions = new ArrayList<>();
         for (Item item : items) {
