@@ -43,7 +43,7 @@ public class GitHubClient {
 
             ObjectMapper mapper = new ObjectMapper();
             List<Item> items = Arrays.asList(mapper.readValue(entity.getContent(), Item[].class));
-            //extractKeyWords(items);
+            extractKeyWords(items);
             return items;
         };
 
@@ -58,11 +58,18 @@ public class GitHubClient {
     private void extractKeyWords(List<Item> items) {
         MonkeyLearnClient monkeyLearnClient = new MonkeyLearnClient();
         List<String> descriptions = new ArrayList<>();
+        //List<String> titles = new ArrayList<>();
         for (Item item : items) {
-            descriptions.add(item.getDescription());
+            descriptions.add(item.getDescription().replace("·", " "));
+            //titles.add(item.getTitle());
         }
 
+
         List<Set<String>> keywordList = monkeyLearnClient.extract(descriptions);
+        // if we can not extract keywords through description, we will use titles as the keywords
+//        if (keywordList.isEmpty()) {
+//            keywordList = monkeyLearnClient.extract(titles);
+//        }
         for (int i = 0; i < items.size(); i++) {
             items.get(i).setKeywords(keywordList.get(i));
         }
