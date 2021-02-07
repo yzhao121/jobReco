@@ -2,10 +2,10 @@ package com.ita.job.db;
 
 import com.ita.job.entity.Item;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MySQLConnection {
     private Connection conn;
@@ -94,4 +94,78 @@ public class MySQLConnection {
         }
     }
 
+    public Set<String> getFavoriteItemIds(String userId) {
+        if (conn == null) {
+            System.err.println("DB connection failed");
+            return new HashSet<>();
+        }
+
+        Set<String> favoriteItems = new HashSet<>();
+
+        try {
+            String sql = "SELECT item_id FROM history WHERE user_id = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, userId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                String itemId = rs.getString("Item_id");
+                favoriteItems.add(itemId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return favoriteItems;
+    }
+
+    public Set<Item> getFavoriteItems(String userId) {
+        if (conn == null) {
+            System.err.println("DB connection failed");
+            return new HashSet<>();
+        }
+        Set<Item> favoriteItems = new HashSet<>();
+        Set<String> favoriteItemIds = getFavoriteItemIds(userId);
+
+        String sql = "SELECT * FROM items WHERE item_id = ?";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            for (String itemId : favoriteItemIds) {
+                statement.setString(1, itemId);
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    favoriteItems.add(new Item(rs.getString("item_id")
+                                , rs.getString("name")
+                                , rs.getString("address")
+                                , rs.getString("image_url")
+                                , rs.getString("url")
+                                , null
+                                , getKeywords(itemId)
+                                , true));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return favoriteItems;
+    }
+
+    public Set<String> getKeywords(String itemId) {
+        if (conn == null) {
+            System.err.println("DB connection failed");
+            return Collections.emptySet();
+        }
+        Set<String> keywords = new HashSet<>();
+        String sql = "SELECT keyword from keywords WHERE item_id = ? ";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, itemId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                String keyword = rs.getString("keyword");
+                keywords.add(keyword);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return keywords;
+    }
 }

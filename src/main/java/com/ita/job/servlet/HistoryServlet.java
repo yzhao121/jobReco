@@ -3,6 +3,7 @@ package com.ita.job.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ita.job.db.MySQLConnection;
 import com.ita.job.entity.HistoryRequestBody;
+import com.ita.job.entity.Item;
 import com.ita.job.entity.ResultResponse;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 @WebServlet(name = "HistoryServlet", urlPatterns = {"/history"})
 public class HistoryServlet extends HttpServlet {
@@ -28,7 +30,15 @@ public class HistoryServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        ObjectMapper mapper = new ObjectMapper();
 
+        String userId = request.getParameter("user_id");
+
+        MySQLConnection connection = new MySQLConnection();
+        Set<Item> items = connection.getFavoriteItems(userId);
+        connection.close();
+        mapper.writeValue(response.getWriter(), items);
     }
 
     @Override
