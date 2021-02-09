@@ -70,7 +70,7 @@ public class GitHubClient {
 //        if (keywordList.isEmpty()) {
 //            keywordList = monkeyLearnClient.extract(titles);
 //        }
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < Math.min(items.size(), keywordList.size()); i++) {
             items.get(i).setKeywords(keywordList.get(i));
         }
 
