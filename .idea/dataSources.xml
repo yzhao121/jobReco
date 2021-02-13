@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="Jobplus MySQL" uuid="d093195a-18f9-4aef-8368-9e0256e49bae">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://jobrecmd-instance.cbdtqic7akbf.us-east-2.rds.amazonaws.com:3306/jobrecmd</jdbc-url>
+    </data-source>
+  </component>
+</project>
