@@ -87,7 +87,7 @@
         var username = oLoginUsername.value,
             password = oLoginPwd.value;
 
-        if (username === "" || password == "") {
+        if (username === "" || password === "") {
             oLoginErrorField.innerHTML = 'Please fill in all fields';
             return;
         }
@@ -119,14 +119,19 @@
      * @param evt
      */
     function changeFavoriteItem(evt) {
+        // oParent: get the parent element from the current event target
+        // in this case, we have <li> now
         var tar = evt.target,
             oParent = tar.parentElement;
 
+        // once we know if the current item is a favorite or not
+        // we need to determine what function we need
+        // and for updating the list we have to get the following information
         if (oParent && oParent.className === 'fav-link') {
             console.log('change ...')
             var oCurLi = oParent.parentElement,
                 classname = tar.className,
-                isFavorite = classname === 'fa fa-heart' ? true : false,
+                isFavorite = classname === 'fa fa-heart',
                 oItems = oItemList.getElementsByClassName('item'),
                 index = Array.prototype.indexOf.call(oItems, oCurLi),
                 url = './history',
@@ -163,7 +168,7 @@
             firstName = oRegisterFirstName.value,
             lastName = oRegisterLastName.value;
 
-        if (username === "" || password == "" || firstName === ""
+        if (username === "" || password === "" || firstName === ""
             || lastName === "") {
             oRegisterResultField.innerHTML = 'Please fill in all fields';
             return;
