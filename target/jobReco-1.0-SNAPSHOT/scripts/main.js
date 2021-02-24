@@ -1,5 +1,5 @@
 //use IIFE to do scope isolation
-;(function () {
+(function () {
     // get all elements
     var oAvatar = document.getElementById('avatar'),
         oWelcomeMsg = document.getElementById('welcome-msg'),
